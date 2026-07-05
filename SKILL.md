@@ -109,7 +109,7 @@ Có thể kèm ảnh trực tiếp trong message → skill tự phân tích.
 1. Kiểm tra file tồn tại
 2. Chạy script transcribe:
 ```bash
-bash /Users/minhtqm1993/.gemini/config/skills/dnd-ads/scripts/transcribe_video.sh "<video_path>"
+bash /Users/minhtqm1993/.claude/skills/dnd-ads/scripts/transcribe_video.sh "<video_path>"
 ```
 3. Nhận transcript text từ stdout
 4. Dùng transcript làm context chính (thay thế hoặc bổ sung `desc`)
@@ -173,10 +173,10 @@ Route theo platform:
 1. Đọc `platforms/google-rsa.md`
 2. Sinh 1 asset set:
    - **15 Titles** (≤ 30 ký tự mỗi title, 5 categories)
-   - **6 Descriptions** (≤ 90 ký tự mỗi desc, 6 focuses)
-3. Đếm chính xác số ký tự — PHẢI ≤ limit
+   - **6 Description candidates** (≤ 90 ký tự mỗi desc, 6 focuses) → chọn đúng **4 final** theo hướng dẫn "Chọn 4 Final" trong `platforms/google-rsa.md`
+3. Chạy `scripts/validate_chars.py` để đếm chính xác số ký tự — KHÔNG tự đếm bằng mắt/LLM (xem `qa/checks.md` mục "Bước 2 & 5")
 4. Check redundancy
-5. Nếu `lang=en`: sinh thêm 1 asset set tiếng Anh bên dưới
+5. Nếu `lang=en`: sinh thêm 1 asset set tiếng Anh bên dưới (cũng phải chạy lại validator cho bản tiếng Anh)
 
 #### Nếu `fb gg` (cả 2):
 1. Sinh Facebook content trước
@@ -187,16 +187,25 @@ Route theo platform:
 
 ### Bước 5 — QA (BẮT BUỘC)
 
-1. Đọc `qa/checks.md`
-2. Chạy **Cross-Platform Checks** (10 items): absolute claims, banned words, pronouns, promotion accuracy, doctor accuracy, CTA clarity, hook quality, emoji discipline, healthcare compliance, disclaimer
-3. Chạy **Platform-Specific Checks**:
-   - Facebook: F1-F5 (character limits, variation diversity, mobile-first)
-   - Google RSA: G1-G5 (hard limits, category coverage, redundancy)
-4. Nếu BẤT KỲ check FAIL → **sửa ngay**, chạy lại check
-5. **Scoring**:
-   - Facebook: score mỗi variation (1-10)
-   - Google RSA: score overall asset quality (1-10)
-6. Nếu average score ≤ 6 → **viết lại**, không output
+Đọc `qa/checks.md` và chạy đúng **QA Flow** theo thứ tự cố định ghi trong file đó:
+
+1. Generate assets (đã làm ở Bước 4)
+2. Chạy `scripts/validate_chars.py` (character/count validator — deterministic, không tự đếm bằng LLM)
+3. **Persona QA** (self-QA, forced defect search) — 6 persona: Policy, Medical Claims, Offer/Doctor Accuracy, Mobile Scanability, Brand/Tone, RSA Diversity. Mỗi persona PHẢI chỉ ra lỗi cụ thể (asset # + câu trích) hoặc khai báo rõ đã check gì
+4. Sửa lỗi nếu có
+5. Chạy lại `scripts/validate_chars.py`
+6. Chỉ output asset đã pass
+
+**Strict QA (escalation)**: nếu gặp 1 trong các điều kiện sau, PHẢI chuyển từ self-QA sang spawn 1 Agent review độc lập (không self-QA trong cùng completion) — xem chi tiết "Strict QA" trong `qa/checks.md`:
+- Bác sĩ detect được không match danh sách `dnd-info.md`
+- Claim về kết quả/phục hồi/an toàn vượt quá thông tin xác nhận
+- Số tiền/%/deadline ưu đãi khác với `promotions.md`
+- Validator fail sau khi đã sửa 1 lần
+
+**Scoring** (sau khi qua Persona QA):
+- Facebook: score mỗi variation (1-10)
+- Google RSA: score overall asset quality (1-10)
+- Average score ≤ 6 → **viết lại**, không output
 
 ---
 

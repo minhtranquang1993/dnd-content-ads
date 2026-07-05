@@ -13,10 +13,11 @@
 | Element | Hard Limit | Số lượng | Display |
 |---------|:----------:|:--------:|---------| 
 | **Title (Headline)** | **≤ 30 ký tự** | **15** | Google hiển thị 2-3 cùng lúc |
-| **Description** | **≤ 90 ký tự** | **6** | Google hiển thị 1-2 cùng lúc |
+| **Description** | **≤ 90 ký tự** | **4 final** (từ 6 candidates) | Google hiển thị 1-2 cùng lúc |
 | **URL Path** | 15 ký tự | Tối đa 2 | VD: /kham-mat/uu-dai |
 
-> ⚠️ **HARD LIMIT**: Google REJECT nếu vượt. Đếm chính xác, KHÔNG ước lượng.
+> ⚠️ **HARD LIMIT**: Google Ads API chỉ cho upload tối đa **15 headlines + 4 descriptions** mỗi RSA. Google REJECT nếu vượt.
+> ⚠️ **Đếm ký tự**: KHÔNG tự đếm bằng mắt/LLM. PHẢI chạy `scripts/validate_chars.py` (xem `qa/checks.md`) trước khi output — đếm code-point sau NFC normalize, chính xác 100% cho tiếng Việt.
 > ⚠️ **Tiếng Việt**: Dấu Unicode tính 1 ký tự. "Phẫu thuật" = 10 chars. Rất chặt!
 
 ---
@@ -79,7 +80,9 @@
 
 ---
 
-## Description Strategy (6 Descriptions)
+## Description Strategy (6 Candidates → 4 Final)
+
+> Google RSA chỉ cho upload tối đa **4 descriptions**. Sinh 6 candidates theo 6 focus dưới đây để có đa dạng, sau đó **chọn đúng 4 final** trước khi output (loại bỏ 2 candidate yếu nhất hoặc trùng lặp ý nhiều nhất với candidate khác).
 
 | # | Focus | Template | Max |
 |---|-------|----------|:---:|
@@ -89,6 +92,11 @@
 | 4 | **CTA** | Kêu gọi hành động + risk reversal + next step | 90 chars |
 | 5 | **Technology** | Công nghệ + phương pháp + thiết bị | 90 chars |
 | 6 | **Experience** | Trải nghiệm bệnh nhân, quy trình nhanh | 90 chars |
+
+### Chọn 4 Final
+- Ưu tiên giữ **Benefit** và **CTA** (2 focus cốt lõi luôn nên có mặt)
+- Chọn thêm 2 trong 4 còn lại (Proof/Offer/Technology/Experience) dựa trên context cụ thể của campaign (VD: nếu đang có ưu đãi mạnh trong `promotions.md` → ưu tiên giữ Offer)
+- Output chỉ hiển thị 4 descriptions đã chọn, không hiển thị 6 candidates gốc
 
 ### Ví dụ Descriptions (DND-specific)
 
@@ -153,16 +161,14 @@
 | 14 | Proof | {title} | {n} | — |
 | 15 | Proof | {title} | {n} | — |
 
-## 6 Descriptions
+## 4 Descriptions (Final — đã chọn từ 6 candidates)
 
 | # | Focus | Description | Chars |
 |---|-------|-------------|:-----:|
 | 1 | Benefit | {desc} | {n} |
-| 2 | Proof | {desc} | {n} |
-| 3 | Offer | {desc} | {n} |
-| 4 | CTA | {desc} | {n} |
-| 5 | Technology | {desc} | {n} |
-| 6 | Experience | {desc} | {n} |
+| 2 | CTA | {desc} | {n} |
+| 3 | {Proof/Offer/Technology/Experience} | {desc} | {n} |
+| 4 | {Proof/Offer/Technology/Experience} | {desc} | {n} |
 
 ## URL Paths
 - Path 1: /{slug-dịch-vụ}
@@ -181,6 +187,7 @@
 - No same format patterns: ✅/❌
 - All titles ≤ 30 chars: ✅/❌
 - All descriptions ≤ 90 chars: ✅/❌
+- Descriptions count == 4 (final, not 6 candidates): ✅/❌
 
 ## Pin Suggestions
 - **Position 1:** #{title_number} — {reason}
