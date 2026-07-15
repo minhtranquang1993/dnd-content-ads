@@ -28,8 +28,10 @@ echo '{
   "url_paths": ["/...", "/..."],
   "expected_title_count": 15,
   "expected_description_count": 4
-}' | python3 /Users/minhtqm1993/.claude/skills/dnd-ads/scripts/validate_chars.py
+}' | python "$HOME/.claude/skills/dnd-ads/scripts/validate_chars.py"
 ```
+
+> Windows/Git Bash: dùng `python` (không phải `python3`). Nếu `python` không có, thử `py -3`.
 
 - Exit code `0` = tất cả pass. Exit code `1` = có ít nhất 1 fail → xem field nào fail trong JSON output, sửa asset đó, chạy lại.
 - Google RSA: `expected_title_count=15`, `expected_description_count=4` (4 final, không phải 6 candidates).

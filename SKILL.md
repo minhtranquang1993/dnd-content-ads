@@ -53,7 +53,7 @@ Tạo content quảng cáo chuyên biệt cho **Bệnh viện Mắt Quốc tế 
 ```
 
 ```
-/dnd-ads fb uudai=kx video="/Users/minhtqm1993/Downloads/review-smile-pro.mp4"
+/dnd-ads fb uudai=kx video="/c/Users/Admin/Downloads/review-smile-pro.mp4"
 ```
 
 ```
@@ -109,7 +109,7 @@ Có thể kèm ảnh trực tiếp trong message → skill tự phân tích.
 1. Kiểm tra file tồn tại
 2. Chạy script transcribe:
 ```bash
-bash /Users/minhtqm1993/.claude/skills/dnd-ads/scripts/transcribe_video.sh "<video_path>"
+bash ~/.claude/skills/dnd-ads/scripts/transcribe_video.sh "<video_path>"
 ```
 3. Nhận transcript text từ stdout
 4. Dùng transcript làm context chính (thay thế hoặc bổ sung `desc`)
@@ -127,7 +127,6 @@ Scan toàn bộ nội dung (transcript, desc, phân tích ảnh) tìm tên bác 
 | Từ khóa nhận diện | Bác sĩ |
 |-------------------|--------|
 | "BS Tuấn", "bác sĩ Tuấn", "Bùi Quang Tuấn", "giám đốc" | BSNT Bùi Quang Tuấn |
-| "BS Hà", "bác sĩ Hà", "Lê Thị Thu Hà", "trưởng khoa khúc xạ" | ThS.BS Lê Thị Thu Hà |
 | "BS Linh", "Hoàng Mai Linh" | ThS.BS Hoàng Mai Linh |
 | "PGS Lan", "Võ Thị Hoàng Lan" | PGS.TS.BS Võ Thị Hoàng Lan |
 | "BS Dũng", "Nguyễn Đăng Dũng", "người sáng lập" | BS.CKII Nguyễn Đăng Dũng |

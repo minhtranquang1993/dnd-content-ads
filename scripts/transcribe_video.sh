@@ -12,6 +12,16 @@
 
 set -euo pipefail
 
+# --- Resolve python command (Windows Git Bash uses 'python', not 'python3') ---
+if command -v python3 >/dev/null 2>&1; then
+    PY=python3
+elif command -v python >/dev/null 2>&1; then
+    PY=python
+else
+    echo "❌ Error: python not found on PATH" >&2
+    exit 1
+fi
+
 # --- Validate input ---
 if [ -z "${1:-}" ]; then
     echo "❌ Error: No video path provided"
@@ -60,7 +70,7 @@ case "$EXTENSION" in
 esac
 
 # --- Get file size for progress info ---
-FILE_SIZE=$(stat -f%z "$VIDEO_PATH" 2>/dev/null || stat -c%s "$VIDEO_PATH" 2>/dev/null || echo "unknown")
+FILE_SIZE=$(stat -c%s "$VIDEO_PATH" 2>/dev/null || stat -f%z "$VIDEO_PATH" 2>/dev/null || echo "unknown")
 echo "📁 File: $(basename "$VIDEO_PATH")" >&2
 echo "📦 Size: $FILE_SIZE bytes" >&2
 echo "🎤 Content-Type: $CONTENT_TYPE" >&2
@@ -75,7 +85,7 @@ RESPONSE=$(curl -s \
     --url 'https://api.deepgram.com/v1/listen?model=nova-3&smart_format=true&detect_language=true&paragraphs=true&punctuate=true')
 
 # --- Check for API errors ---
-ERROR=$(echo "$RESPONSE" | python3 -c "
+ERROR=$(echo "$RESPONSE" | "$PY" -c "
 import sys, json
 try:
     data = json.load(sys.stdin)
@@ -93,7 +103,7 @@ if [ -n "$ERROR" ]; then
 fi
 
 # --- Extract transcript ---
-TRANSCRIPT=$(echo "$RESPONSE" | python3 -c "
+TRANSCRIPT=$(echo "$RESPONSE" | "$PY" -c "
 import sys, json
 data = json.load(sys.stdin)
 try:
@@ -111,7 +121,7 @@ except (KeyError, IndexError):
 ")
 
 # --- Detect language ---
-LANGUAGE=$(echo "$RESPONSE" | python3 -c "
+LANGUAGE=$(echo "$RESPONSE" | "$PY" -c "
 import sys, json
 try:
     data = json.load(sys.stdin)

@@ -39,13 +39,6 @@
 - **Đặc điểm:** Nổi tiếng khéo tay, tận tâm, hàng chục nghìn ca thành công
 - **Từ khóa nhận diện:** "BS Tuấn", "bác sĩ Tuấn", "Bùi Quang Tuấn"
 
-### ThS.BS Lê Thị Thu Hà — Trưởng khoa Khúc xạ
-- **Kinh nghiệm:** 12+ năm nhãn khoa
-- **Học vị:** Thạc sĩ Đại học Y Hà Nội
-- **Chuyên môn:** Kiểm soát cận thị trẻ em, phẫu thuật laser hiện đại
-- **Đặc điểm:** Nhẹ nhàng, chu đáo, chuyên gia Ortho-K
-- **Từ khóa nhận diện:** "BS Hà", "bác sĩ Hà", "Lê Thị Thu Hà"
-
 ### ThS.BS Hoàng Mai Linh
 - **Kinh nghiệm:** 7+ năm nhãn khoa
 - **Từ khóa nhận diện:** "BS Linh", "Hoàng Mai Linh"
