@@ -32,6 +32,43 @@ Tạo content quảng cáo chuyên biệt cho **Bệnh viện Mắt Quốc tế 
 
 ---
 
+## `--huongdan` — Cheat sheet (in ra rồi DỪNG)
+
+**Trigger:** lệnh chứa `--huongdan`, `--help`, `-h`, `huongdan`, `hướng dẫn` (vd `/dnd-ads --huongdan`).
+**Hành vi:** in nguyên khối 📌 dưới đây ra chat rồi **DỪNG** — không phân tích ảnh, không transcribe video, không sinh ads, không hỏi thiếu param. Cờ này loại trừ mọi tham số khác trong lệnh.
+
+### 📌 /dnd-ads — Content quảng cáo Facebook & Google RSA cho DND
+
+**Làm gì:** sinh content ads cho BV Mắt Quốc tế DND Sài Gòn từ mô tả / ảnh đính kèm / video local, có auto-detect bác sĩ và bắt buộc qua QA trước khi xuất.
+
+**Cú pháp**
+`/dnd-ads <fb|gg|fb gg> uudai=<kx|pc|or> desc="<mô tả>" [video="<path>"] [lang=vi|en] [variations=1-5]`
+
+| Param | Bắt buộc | Mặc định | Ý nghĩa |
+|---|---|---|---|
+| `platform` | ✅ | — | `fb` / `gg` / `fb gg` |
+| `uudai` | ✅ | — | `kx` khúc xạ · `pc` phaco · `or` ortho-k |
+| `desc` | ✅* | — | Mô tả nội dung ads (*bỏ được nếu có ảnh/video) |
+| `video` | ❌ | — | File local → transcribe qua Deepgram |
+| `lang` | ❌ | `vi` | `vi` hoặc `en` (khách expat) |
+| `variations` | ❌ | `3` | Số variation Facebook (1-5). Google RSA luôn 1 asset set |
+
+**Ví dụ**
+1. `/dnd-ads fb uudai=kx desc="video review mổ SMILE Pro của BS Tuấn"`
+2. `/dnd-ads gg uudai=pc desc="phẫu thuật Femto Phaco cho người già"`
+3. `/dnd-ads fb gg uudai=or desc="kính Ortho-K cho trẻ em"`
+4. `/dnd-ads fb uudai=kx video="/Users/minhtqm1993/Downloads/review.mp4"`
+5. `/dnd-ads fb uudai=kx lang=en desc="SMILE Pro surgery review"` + đính kèm ảnh
+
+**Output:** Facebook 3 variation theo bố cục Hook → Nội dung → Ưu đãi → CTA (+ Headline + Description), hoặc Google RSA asset set, kèm QA report.
+
+**Lưu ý**
+- Chưa qua QA = chưa xong task, không được xuất bài.
+- Ảnh đính kèm trong message tự phân tích bằng vision; video phải truyền qua `video="…"`.
+- Số ưu đãi chỉ lấy từ `promotions.md`; tên/credentials bác sĩ chỉ nhắc khi input nêu rõ.
+
+---
+
 ## Trigger & Usage
 
 ```
